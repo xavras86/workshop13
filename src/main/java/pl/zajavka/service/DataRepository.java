@@ -1,6 +1,7 @@
 package pl.zajavka.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 import pl.zajavka.domain.User;
@@ -14,11 +15,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Slf4j
+@Repository
 public class DataRepository {
     public List<User> readUsers() {
         try {
             return Files.readAllLines(ResourceUtils.getFile("classpath:users.csv").toPath()).stream()
-                    .map(line -> mapUser(line))
+                    .map(this::mapUser)
                     .filter(Optional::isPresent)
                     .map(Optional::get)
                     .toList();
